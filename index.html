@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时间戳转换 & 二维码工具</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>时间戳转换 & 二维码工具</h1>
+        
+        <nav class="main-nav">
+            <button class="nav-btn active" data-page="timestamp">时间戳转换</button>
+            <button class="nav-btn" data-page="qrcode">二维码工具</button>
+        </nav>
+
+        <div id="timestamp-page" class="page active">
+            <div class="current-time">
+                <p>当前时间: <span id="currentTime"></span></p>
+                <p>当前时间戳: <span id="currentTimestamp"></span></p>
+            </div>
+
+            <div class="converter-section">
+                <div class="input-group">
+                    <label for="timestampInput">输入时间戳:</label>
+                    <input type="text" id="timestampInput" placeholder="请输入10位或13位时间戳">
+                    <div class="input-hint" id="timestampHint">请输入时间戳</div>
+                    <button onclick="convertTimestamp()">转换为时间</button>
+                </div>
+                <div class="result" id="result"></div>
+            </div>
+
+            <div class="converter-section">
+                <div class="input-group">
+                    <label for="dateInput">输入日期时间:</label>
+                    <div class="date-input-wrapper" id="dateInputWrapper">
+                        <input type="datetime-local" id="dateInput">
+                    </div>
+                    <button onclick="convertToTimestamp()">转换为时间戳</button>
+                </div>
+                <div class="result" id="timestampResult"></div>
+            </div>
+        </div>
+
+        <div id="qrcode-page" class="page">
+            <div class="qr-section">
+                <div class="qr-generate">
+                    <h2>生成二维码</h2>
+                    <div class="input-group">
+                        <textarea id="qrInput" placeholder="输入要生成二维码的文本内容"></textarea>
+                        <button onclick="generateQR()">生成二维码</button>
+                    </div>
+                    <div id="qrResult" class="qr-display"></div>
+                </div>
+
+                <div class="qr-scan">
+                    <h2>识别二维码</h2>
+                    <div class="input-group">
+                        <input type="file" id="qrFile" accept="image/*">
+                        <button onclick="scanQR()">识别二维码</button>
+                    </div>
+                    <div id="scanResult" class="result"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
