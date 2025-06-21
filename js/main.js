@@ -1,7 +1,7 @@
-// QR code library
-const qrScript = document.createElement('script');
-qrScript.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
-document.head.appendChild(qrScript);
+// QR code library - 已在HTML中直接引用
+// const qrScript = document.createElement('script');
+// qrScript.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js';
+// document.head.appendChild(qrScript);
 
 // QR code scanner library
 const jsQRScript = document.createElement('script');
@@ -103,10 +103,42 @@ function generateQRCode(text) {
         alert('请输入要生成二维码的文本');
         return;
     }
-    qrOutput.innerHTML = '';
-    QRCode.toCanvas(qrOutput, text, { width: 256 }, (error) => {
-        if (error) console.error(error);
-    });
+    qrOutput.innerHTML = '<p>正在生成二维码...</p>';
+    try {
+        if (typeof QRCode === 'undefined') {
+            qrOutput.innerHTML = '<p style="color: red;">QRCode库未加载，请检查网络</p>';
+            return;
+        }
+        const canvas = document.createElement('canvas');
+        QRCode.toCanvas(canvas, text, {
+            width: 256,
+            margin: 2,
+            errorCorrectionLevel: 'H',
+            color: {
+                dark: '#000000',
+                light: '#ffffff'
+            }
+        }).then(() => {
+            qrOutput.innerHTML = '';
+            qrOutput.appendChild(canvas);
+            // 下载按钮
+            const downloadBtn = document.createElement('button');
+            downloadBtn.textContent = '下载二维码';
+            downloadBtn.style.marginTop = '1rem';
+            downloadBtn.onclick = () => {
+                const link = document.createElement('a');
+                link.download = 'qrcode.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            };
+            qrOutput.appendChild(downloadBtn);
+        }).catch((error) => {
+            qrOutput.innerHTML = '<p style="color: red;">生成二维码失败: ' + error.message + '</p>';
+        });
+    } catch (error) {
+        qrOutput.innerHTML = '<p style="color: red;">生成二维码失败: ' + error.message + '</p>';
+        console.error('QR Code generation error:', error);
+    }
 }
 
 function scanQRCode(file) {
